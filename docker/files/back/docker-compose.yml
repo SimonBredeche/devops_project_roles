@@ -6,4 +6,4 @@ services:
     container_name: my-back
     tty: true
     ports:
-      - "8080:80"
+      - "7070:80"

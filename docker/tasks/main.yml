@@ -36,11 +36,45 @@
     dest: /simon/demo-dockerfile/
 - name: copy Dockerfile
   copy:
-    src: Dockerfile
+    src: front/Dockerfile
     dest: /simon/demo-dockerfile/Dockerfile
     mode: '0644'
 - name: copy Docker-compose
   copy:
-    src: docker-compose.yml
+    src: front/docker-compose.yml
     dest: /simon/demo-dockerfile/docker-compose.yml
     mode: '0644'
+- name: copy Backend
+  copy:
+    src: /home/simon/Desktop/PROGRAMS/ansible_yml/application/back
+    dest: /simon/
+- name: copy Dockerfile
+  copy:
+    src: back/Dockerfile
+    dest: /simon/back/Dockerfile
+    mode: '0644'
+- name: copy Docker-compose
+  copy:
+    src: back/docker-compose.yml
+    dest: /simon/back/docker-compose.yml
+    mode: '0644'
+- name: Build container front
+  become: True
+  shell:
+    cmd: "docker-compose build"
+    chdir: /simon/demo-dockerfile/
+- name: Run container front
+  become: True
+  shell:
+    cmd: "docker-compose up -d"
+    chdir: /simon/demo-dockerfile/
+- name: Build container back
+  become: True
+  shell:
+    cmd: "docker-compose build"
+    chdir: /simon/back/
+- name: Run container back
+  become: True
+  shell:
+    cmd: "docker-compose up -d"
+    chdir: /simon/back/
