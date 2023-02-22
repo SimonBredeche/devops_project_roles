@@ -1,0 +1,9 @@
+version: '3'
+services:
+  web:
+    image: img-static-site-example
+    build: .
+    container_name: my-back
+    tty: true
+    ports:
+      - "8080:80"

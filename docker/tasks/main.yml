@@ -1,0 +1,46 @@
+---
+- name: Install basic pages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - python3-docker
+- name: Download docker package 
+  get_url:
+    url: "{{ docker_package_path }}"
+    dest: "{{ docker_dest_path }}"
+- name: Download docker compose
+  apt:
+    name: docker-compose
+    state: present
+- name: check apt source
+  apt_repository: 
+    repo: "{{ docker_repo_path }}"
+    state: present
+- name: Install docker page
+  apt:
+    name: docker-ce
+    state: present
+- name: create build directory 
+  file:
+    path: /simon/demo-dockerfile
+    state: directory
+    mode: '0755'
+- name: copy Front
+  copy:
+    src: /home/simon/Desktop/PROGRAMS/ansible_yml/application/front/
+    dest: /simon/demo-dockerfile/
+- name: copy Dockerfile
+  copy:
+    src: Dockerfile
+    dest: /simon/demo-dockerfile/Dockerfile
+    mode: '0644'
+- name: copy Docker-compose
+  copy:
+    src: docker-compose.yml
+    dest: /simon/demo-dockerfile/docker-compose.yml
+    mode: '0644'

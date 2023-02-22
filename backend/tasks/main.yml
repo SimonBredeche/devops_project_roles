@@ -1,0 +1,63 @@
+---
+- name: Install basic pages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - tzdata
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - python3-docker
+    - python3-mysqldb
+    - mysql-server
+- name: "Create database"
+  mysql_db: 
+    name: "{{ mysql_db }}"
+- name: "Create user"
+  mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_passwd }}"
+    priv: "*.*:ALL"
+    host: '{{ mysql_host_ip }}'
+- name: Download docker package 
+  get_url:
+    url: "{{ docker_package_path }}"
+    dest: "{{ docker_dest_path }}"
+- name: Download docker compose
+  apt:
+    name: docker-compose
+    state: present
+- name: check apt source
+  apt_repository: 
+    repo: "{{ docker_repo_path }}"
+    state: present
+- name: Install docker page
+  apt:
+    name: docker-ce
+    state: present
+- name: create build directory 
+  file:
+    path: backend
+    state: directory
+    mode: '0755'
+- name: copy Backend
+  copy:
+    src: /home/simon/Desktop/PROGRAMS/ansible_yml/application/back/
+    dest: backend/
+- name: copy Dockerfile
+  copy:
+    src: Dockerfile
+    dest: backend/Dockerfile
+    mode: '0644'
+- name: copy Docker-compose
+  copy:
+    src: docker-compose.yml
+    dest: backend/docker-compose.yml
+    mode: '0644'
+- name: copy my.cnf
+  copy:
+    src: my.cnf
+    dest: /etc/mysql/
+    mode: '0644'

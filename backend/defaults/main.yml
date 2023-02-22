@@ -1,0 +1,8 @@
+---
+docker_package_path: https://download.docker.com/linux/ubuntu/gpg
+docker_dest_path: /etc/apt/trusted.gpg.d/docker.asc
+docker_repo_path: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+mysql_db: "demo_devops"
+mysql_passwd: "demo"
+mysql_user: "demo"
+mysql_host_ip: "%"
