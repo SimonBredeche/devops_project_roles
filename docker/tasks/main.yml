@@ -9,6 +9,7 @@
     - curl
     - software-properties-common
     - python3-docker
+    - mysql-client
 - name: Download docker package 
   get_url:
     url: "{{ docker_package_path }}"
@@ -58,6 +59,19 @@
     src: back/docker-compose.yml
     dest: /simon/back/docker-compose.yml
     mode: '0644'
+- name: copy dump_sql script
+  copy:
+    src: back/dump_sql.sh
+    dest: /simon/dump_sql.sh
+    mode: '0644'
+- name: Create crontab for sql dump
+  ansible.builtin.cron: 
+    name: "run sql dump every day"
+    minute: "0"
+    hour: "20"
+    job: "sh /simon/dump_sql.sh"
+    user: root
+    cron_file: sql_dump_cron
 - name: Build container front
   become: True
   shell:
